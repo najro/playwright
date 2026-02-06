@@ -1,0 +1,59 @@
+# Azure DevOps pipeline example
+# - Stores secrets in pipeline variables (Library) or Key Vault
+# - Runs Playwright tests and publishes the HTML report as an artifact
+#
+# TIP: If you use Microsoft-hosted agents, Playwright can install browsers with:
+#   npx playwright install --with-deps
+# But you can also cache browsers between runs if needed.
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  NODE_VERSION: '20.x'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '$(NODE_VERSION)'
+  displayName: 'Use Node.js $(NODE_VERSION)'
+
+- script: |
+    npm ci
+  displayName: 'Install dependencies'
+
+- script: |
+    npx playwright install --with-deps
+  displayName: 'Install Playwright browsers'
+
+# Set env vars here or in pipeline variable groups / Key Vault
+- script: |
+    echo "Running Playwright tests..."
+    npx playwright test --project=portal
+  displayName: 'Run Portal tests'
+  env:
+    CI: 'true'
+    PW_ENV: 'dev'
+    BASE_URL_PORTAL: '$(BASE_URL_PORTAL)'
+    ENTRA_USERNAME: '$(ENTRA_USERNAME)'
+    ENTRA_PASSWORD: '$(ENTRA_PASSWORD)'
+    ENTRA_TOTP_SECRET: '$(ENTRA_TOTP_SECRET)'
+    ENTRA_STAY_SIGNED_IN: 'false'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'test-results/junit.xml'
+    failTaskOnFailedTests: true
+  condition: succeededOrFailed()
+  displayName: 'Publish test results'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: 'playwright-report'
+    artifactName: 'playwright-report'
+  condition: succeededOrFailed()
+  displayName: 'Publish Playwright HTML report'

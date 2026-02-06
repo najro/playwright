@@ -1,0 +1,27 @@
+{
+  "name": "playwright-regjeringen",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright (TypeScript) E2E testing with Entra ID login (incl. MFA via TOTP), multi-project structure, env-based config, POM, and Azure DevOps pipeline.",
+  "scripts": {
+    "test": "playwright test",
+    "test:portal": "playwright test --project=portal",
+    "test:admin": "playwright test --project=admin",
+    "test:all": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "codegen:portal": "playwright codegen $BASE_URL_PORTAL",
+    "report": "playwright show-report",
+    "clean:auth": "node ./scripts/cleanAuthState.js"
+  },
+  "devDependencies": {
+    "@otplib/preset-default": "^12.0.1",
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.0.0",
+    "dotenv": "^16.4.5",
+    "otplib": "^13.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "zod": "^3.23.8"
+  }
+}

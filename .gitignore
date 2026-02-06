@@ -1,0 +1,16 @@
+node_modules/
+dist/
+playwright-report/
+test-results/
+blob-report/
+
+# Auth state
+.auth/
+
+# Local env files (keep .env.example in repo)
+.env
+.env.*
+!.env.example
+!.env.dev.example
+!.env.test.example
+!.env.prod.example
