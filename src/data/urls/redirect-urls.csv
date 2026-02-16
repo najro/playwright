@@ -1,0 +1,12 @@
+url;text;input
+/no/;Front page with standard EPiServer url;/no/id4/
+/id2815530;ID reidrect;/no/aktuelt/offisielt-fra-statsrad-21.-desember-2020/id2815530/
+/no/error/id85844/;Url with errors and correct id;/no/om-regjeringa/slik-blir-norge-styrt/id85844/
+/eosnotat/;Enkel adresse;/no/sub/eos-notatbasen/sok/id615429/
+/id/OTP200520060103000DDDEPIS;Unike URL-er 1 (/id/OTP);/no/dokumenter/otprp-nr-103-2005-2006-/id190808/
+/ID/PRP200920100001_JDDDDEPIS;Unike URL-er 2 (/ID/PRP);/no/dokumenter/prop-1-s-20092010-2/id580981/
+/id/NOU200620060017000DDDEPIS;Unike URL-er 3 (/id/NOU);/no/dokumenter/nou-2006-17/id392311/
+/010031-030002;Gamle Odin-URLer 1;/no/dokumenter/stprp-nr-11-2000-2001-/id433894/
+/fin/norsk/aktuelt/006071-230122/dok-bn.html;Gamle Odin-URLer 2;/no/tema/okonomi-og-budsjett/renter/id1439/
+/no/dokumenter/prop.-244-s-20202021/id2872471.xhtml;XHTML file-extension redirect;/contentassets/bac82c859872464dbc04055448caf1d3/no/xml/prp202020210244000dddkrnl.xml
+/no/dokumenter/meld.-st.-33-20192020/id2765361.pdf;PDF file-extension redirect;/contentassets/943cb244091d4b2fb3782f395d69b05b/nn-no/pdfs/stm201920200033000dddpdfs.pdf

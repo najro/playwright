@@ -98,13 +98,27 @@ export class EntraLoginPage extends BasePage {
   }
 
   private async handleTotpIfPresent(entraTotp?: string) {
-    const secret = entraTotp ?? "";
+    //chconst secret = entraTotp ?? "";
     
     // Wait briefly to see if OTP field shows up
-    const otpLocator = this.page.locator(entraSelectors.totpCode.join(', '));
+    //const otpLocator = this.page.locator(entraSelectors.totpCode.join(', '));
 
-    const hasOtp = await otpLocator.first().isVisible({ timeout: 5_000 }).catch(() => false);
-    if (!hasOtp) return;
+   // const hasOtp = await otpLocator.first().isVisible({ timeout: 5_000 }).catch(() => false);
+
+     const secret = entraTotp ?? '';
+    const otp = this.page.locator(entraSelectors.totpCode.join(', '));
+
+    // 1) Give Entra longer to reach OTP in CI/headless
+    //    (and wait for the field to be actually usable)
+    const otpReady = await otp.first().waitFor({ state: 'visible', timeout: 30_000 })
+      .then(() => true)
+      .catch(() => false);
+
+
+      if (!otpReady) return;
+
+  // Make sure it's interactable (not disabled / not covered)
+    await expect(otp.first()).toBeEnabled({ timeout: 10_000 });
 
     if (!secret) {
       throw new Error(
@@ -113,14 +127,21 @@ export class EntraLoginPage extends BasePage {
       );
     }
 
+     // 2) Fill in a robust way (sometimes .fill is flaky on Entra)
     const code = generateTotp(secret);
-    await otpLocator.first().fill(code);
 
-    // Submit (sometimes same #idSIButton9)
-    await this.clickPrimarySubmitIfPresent();
+    await otp.first().click();
+    await otp.first().fill('');               // clear just in case
+    await otp.first().type(code, { delay: 50 }); // slight human-like delay helps
 
-    // Some flows show "Verify" button or auto-submit; ensure OTP field disappears
-    await expect(otpLocator.first()).toBeHidden({ timeout: 20_000 });
+    // 3) Submit and wait for navigation / next step
+    await Promise.all([
+      this.page.waitForLoadState('networkidle').catch(() => {}),
+      this.clickPrimarySubmitIfPresent(),
+    ]);
+
+    // 4) Confirm OTP step is gone OR we've moved forward
+    await expect(otp.first()).toBeHidden({ timeout: 60_000 });
   }
 
   private async handleStaySignedInPromptIfPresent() {

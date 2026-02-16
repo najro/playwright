@@ -7,6 +7,14 @@ export class BasePage {
     this.page = page;
   }
 
+ async goTo(path: string): Promise<this> {
+    await this.page.goto(path);
+    return this;
+  }
+
+  getUrl(): string {
+    return this.page.url();
+  }
 
   async hideCookieBannerSelectAll() {
       const cookieBanner = this.page.locator('#cookieApiData');

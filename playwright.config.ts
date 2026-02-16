@@ -101,9 +101,9 @@ export default defineConfig({
 
     ...(env.BASE_URL_SITE
       ? [{
-          name: 'admin',
-          dependencies: ['setup-admin'],
-          testMatch: /site\/.*\.spec\.ts/,
+          name: 'url',
+          dependencies: ['setup-enduser'],
+          testMatch: /url\/.*\.spec\.ts/,
           use: {
             ...devices['Desktop Chrome'],
             baseURL: env.BASE_URL_SITE,

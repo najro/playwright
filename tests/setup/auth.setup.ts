@@ -46,14 +46,16 @@ if(appName === 'editor' || appName === 'admin'){
         await entra.loginAutoMfa(env.ENTRA_EDITOR_USERNAME, env.ENTRA_EDITOR_PASSWORD, env.ENTRA_EDITOR_TOTP_SECRET);
       } else if(appName === 'admin') {
         await entra.loginAutoMfa(env.ENTRA_ADMIN_USERNAME, env.ENTRA_ADMIN_PASSWORD, env.ENTRA_ADMIN_TOTP_SECRET);
-      }
-  } else {
-    await entra.loginManual();
+      } else if(appName === 'enduser') {
+        // do nothing
+      }    
+  }else{
+    if(appName === 'editor' || appName === 'admin'){
+      await entra.loginManual();
+    }    
   }
 
-  //await entra.loginAutoMfa();
   
-
   // Optional: assert we're back in the app after login
   /*const postLoginPath =  appName === 'editor' || appName === 'admin' ? env.POST_LOGIN_PATH_CMS : env.POST_LOGIN_PATH_CMS;
 
@@ -63,14 +65,6 @@ if(appName === 'editor' || appName === 'admin'){
 
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-  // Check for CookieChangeEvent and remove cookie banner if present
-  /*const cookieBanner = page.locator('#cookieApiData');
-  if (await cookieBanner.isVisible()) {
-    const acceptAllButton = cookieBanner.locator('#userSelectAll');
-    if (await acceptAllButton.isVisible()) {
-      await acceptAllButton.click();
-    } 
-  }*/
 
   await entra.hideCookieBannerSelectAll();
 
