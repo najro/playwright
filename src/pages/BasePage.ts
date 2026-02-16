@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import { url } from 'inspector/promises';
 
 export class BasePage {
   protected readonly page: Page;
@@ -7,8 +8,19 @@ export class BasePage {
     this.page = page;
   }
 
- async goTo(path: string): Promise<this> {
-    await this.page.goto(path);
+ async goTo(url: string): Promise<this> {
+    //await this.page.goto(path);
+
+    //await this.page.goto(url, { waitUntil: 'load' });
+    //await this.page.waitForLoadState('networkidle');
+
+    console.log(`Navigating to ${url}...`);
+    
+    await this.page.goto(url, {
+      waitUntil: 'domcontentloaded',
+      timeout: 60000,
+    });
+
     return this;
   }
 

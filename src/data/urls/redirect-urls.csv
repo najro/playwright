@@ -1,4 +1,4 @@
-url;text;input
+source;description;target
 /no/;Front page with standard EPiServer url;/no/id4/
 /id2815530;ID reidrect;/no/aktuelt/offisielt-fra-statsrad-21.-desember-2020/id2815530/
 /no/error/id85844/;Url with errors and correct id;/no/om-regjeringa/slik-blir-norge-styrt/id85844/

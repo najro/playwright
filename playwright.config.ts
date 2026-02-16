@@ -99,10 +99,21 @@ export default defineConfig({
         }]
       : []),
 
+          ...(env.BASE_URL_SITE
+      ? [{
+          name: 'site',          
+          testMatch: /site\/.*\.spec\.ts/,
+          use: {
+            ...devices['Desktop Chrome'],
+            baseURL: env.BASE_URL_SITE,
+            storageState: authStatePathFor('enduser'),
+          },
+        }]
+      : []),
+
     ...(env.BASE_URL_SITE
       ? [{
-          name: 'url',
-          dependencies: ['setup-enduser'],
+          name: 'url',          
           testMatch: /url\/.*\.spec\.ts/,
           use: {
             ...devices['Desktop Chrome'],
