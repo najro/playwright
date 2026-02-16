@@ -34,17 +34,25 @@ export function loadDotenv() {
  * You can make per-project values optional and conditionally include projects in the config.
  */
 const EnvSchema = z.object({
+
+  AUTO_LOGIN: z.string().optional().transform(v => (v ?? 'false').toLowerCase() === 'true'),
+  
   PW_ENV: z.string().default('local'),
 
-  BASE_URL_PORTAL: z.string().url().optional(),
-  BASE_URL_ADMIN: z.string().url().optional(),
+  BASE_URL_SITE: z.string().url().optional(),
+  /*BASE_URL_CMS: z.string().url().optional(),*/
 
-  POST_LOGIN_PATH_PORTAL: z.string().optional(),
-  POST_LOGIN_PATH_ADMIN: z.string().optional(),
+  POST_LOGIN_PATH_SITE: z.string().optional(),
+  POST_LOGIN_PATH_CMS: z.string().optional(),
 
-  ENTRA_USERNAME: z.string().min(1, 'ENTRA_USERNAME is required'),
-  ENTRA_PASSWORD: z.string().min(1, 'ENTRA_PASSWORD is required'),
-  ENTRA_TOTP_SECRET: z.string().optional(),
+  ENTRA_EDITOR_USERNAME: z.string().min(1, 'ENTRA_EDITOR_USERNAME is required'),
+  ENTRA_EDITOR_PASSWORD: z.string().min(1, 'ENTRA_EDITOR_PASSWORD is required'),
+  ENTRA_EDITOR_TOTP_SECRET: z.string().optional(),
+
+  ENTRA_ADMIN_USERNAME: z.string().min(1, 'ENTRA_ADMIN_USERNAME is required'),
+  ENTRA_ADMIN_PASSWORD: z.string().min(1, 'ENTRA_ADMIN_PASSWORD is required'),
+  ENTRA_ADMIN_TOTP_SECRET: z.string().optional(),
+
 
   ENTRA_STAY_SIGNED_IN: z
     .string()

@@ -24,56 +24,25 @@ setup('authenticate and save storageState', async ({ page }, testInfo) => {
   
   // Start at the app base URL (will trigger redirect to Entra if unauthenticated)
   console.log("Going to page");
+//  await page.goto('/start/cms', { waitUntil: 'domcontentloaded' });
 
-if(appName === 'editor' || appName === 'admin'){
-  await page.goto('https://login.microsoftonline.com', { waitUntil: 'domcontentloaded' });
-}else{
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-}
-
-  //await page.goto('/start/cms', { waitUntil: 'domcontentloaded' });
   //await page.goto('https://mysignins.microsoft.com/security-info', { waitUntil: 'domcontentloaded' });
-  //await page.goto('https://login.microsoftonline.com/', { waitUntil: 'domcontentloaded' });
+  await page.goto('/start/cms', { waitUntil: 'domcontentloaded' });
 
-  
-  
   // Perform login (incl optional MFA)
   const entra = new EntraLoginPage(page);
-
-
-  if (env.AUTO_LOGIN) {    
-      if(appName === 'editor') {
-        await entra.loginAutoMfa(env.ENTRA_EDITOR_USERNAME, env.ENTRA_EDITOR_PASSWORD, env.ENTRA_EDITOR_TOTP_SECRET);
-      } else if(appName === 'admin') {
-        await entra.loginAutoMfa(env.ENTRA_ADMIN_USERNAME, env.ENTRA_ADMIN_PASSWORD, env.ENTRA_ADMIN_TOTP_SECRET);
-      }
-  } else {
-    await entra.loginManual();
-  }
-
-  //await entra.loginAutoMfa();
-  
+  await entra.loginManual();
 
   // Optional: assert we're back in the app after login
-  /*const postLoginPath =  appName === 'editor' || appName === 'admin' ? env.POST_LOGIN_PATH_CMS : env.POST_LOGIN_PATH_CMS;
+  /*
+  const postLoginPath =
+    appName === 'portal' ? env.POST_LOGIN_PATH_PORTAL : env.POST_LOGIN_PATH_ADMIN;
 
   if (postLoginPath) {
     await expect(page).toHaveURL(new RegExp(postLoginPath.replace('/', '\\/')));
   }*/
 
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-
-  // Check for CookieChangeEvent and remove cookie banner if present
-  /*const cookieBanner = page.locator('#cookieApiData');
-  if (await cookieBanner.isVisible()) {
-    const acceptAllButton = cookieBanner.locator('#userSelectAll');
-    if (await acceptAllButton.isVisible()) {
-      await acceptAllButton.click();
-    } 
-  }*/
-
-  await entra.hideCookieBannerSelectAll();
-
+  await page.goto('/start/cms', { waitUntil: 'domcontentloaded' });
 
   // Save storageState for reuse
   const storageStatePath = authStatePathFor(appName);

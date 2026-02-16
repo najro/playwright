@@ -44,56 +44,70 @@ export default defineConfig({
   },
 
   projects: [
+
+    
+
     // ---------------------------
     // Setup projects (auth)
     // ---------------------------
-    ...(env.BASE_URL_PORTAL
+    ...(env.BASE_URL_SITE
       ? [{
-          name: 'setup-portal',
+          name: 'setup-editor',
           testMatch: /setup\/.*\.setup\.ts/,
           use: {
             ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_PORTAL,
+            baseURL: env.BASE_URL_SITE,
           },
         }]
       : []),
 
-    ...(env.BASE_URL_ADMIN
+    ...(env.BASE_URL_SITE
       ? [{
           name: 'setup-admin',
           testMatch: /setup\/.*\.setup\.ts/,
           use: {
             ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_ADMIN,
+            baseURL: env.BASE_URL_SITE,
           },
         }]
       : []),
 
+       ...(env.BASE_URL_SITE
+       ? [{
+          name: 'setup-enduser',
+          testMatch: /setup\/.*\.setup\.ts/,
+          use: {
+            ...devices['Desktop Chrome'],
+            baseURL: env.BASE_URL_SITE,
+          },
+        }]
+      : []),
+   
     // ---------------------------
     // Test projects
     // ---------------------------
-    ...(env.BASE_URL_PORTAL
+    ...(env.BASE_URL_SITE
       ? [{
-          name: 'portal',
-          dependencies: ['setup-portal'],
-          testMatch: /portal\/.*\.spec\.ts/,
+          name: 'editor',
+          dependencies: ['setup-editor'],
+          testMatch: /editor\/.*\.spec\.ts/,
           use: {
             ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_PORTAL,
-            storageState: authStatePathFor('portal'),
+            baseURL: env.BASE_URL_SITE,
+            storageState: authStatePathFor('editor'),
           },
         }]
       : []),
 
-    ...(env.BASE_URL_ADMIN
+    ...(env.BASE_URL_SITE
       ? [{
           name: 'admin',
           dependencies: ['setup-admin'],
-          testMatch: /admin\/.*\.spec\.ts/,
+          testMatch: /site\/.*\.spec\.ts/,
           use: {
             ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_ADMIN,
-            storageState: authStatePathFor('admin'),
+            baseURL: env.BASE_URL_SITE,
+            storageState: authStatePathFor('enduser'),
           },
         }]
       : []),

@@ -10,6 +10,32 @@ export class EntraLoginPage extends BasePage {
     super(page);
   }
 
+  async loginManual() {
+    console.warn(
+      'Manual login mode: Please complete username, password and MFA in the browser.'
+    );
+
+    // If running with PWDEBUG=1 this is super helpful
+    if (process.env.PWDEBUG) {
+      await this.page.pause();
+    }
+
+    // Wait until we leave Microsoft login page
+/*    await this.page.waitForURL(
+      url => !url.hostname.includes('login.microsoftonline.com'),
+      { timeout: 5 * 60_000 } // 5 minutes
+    );*/
+
+    await this.page.waitForURL('**/start/cms', {
+      timeout: 5 * 60_000,
+    });
+
+    console.warn(
+      'Have leaved the url with Microsoft login page, you can start to run your tests now.'
+    );
+
+  }
+
   /**
    * Drives the standard Entra ID login UX.
    * This is intentionally defensive:
@@ -21,29 +47,29 @@ export class EntraLoginPage extends BasePage {
    * - If your Conditional Access requires something you can't automate (e.g., push notification),
    *   you should use a dedicated test policy/user and allow TOTP for automation.
    */
-  async loginWithOptionalMfa() {
+  async loginAutoMfa(entraUsername: string, entraPassword: string, entraTotp?: string) {
     // If your app redirects to Entra, we expect to land on a Microsoft login page.
     // Some apps have a "Sign in" button first; customize in your app-specific flow if needed.
 
     // Username
     const userInput = await firstVisible(this.page, entraSelectors.username, 20_000);
-    await userInput.fill(env.ENTRA_USERNAME);
+    await userInput.fill(entraUsername);
     await this.clickPrimarySubmitIfPresent();
 
     // Password
     const pwdInput = await firstVisible(this.page, entraSelectors.password, 20_000);
-    await pwdInput.fill(env.ENTRA_PASSWORD);
+    await pwdInput.fill(entraPassword);
     await this.clickPrimarySubmitIfPresent();
 
     // Optional: handle "Pick an account" prompt by clicking the first matching account tile
     // (This is best-effort; safe to ignore if not shown.)
     await this.handlePickAnAccountIfPresent();
-
+  
     // Optional: TOTP / OTP page
-    await this.handleTotpIfPresent();
+    await this.handleTotpIfPresent(entraTotp);
 
     // Optional: "Stay signed in?"
-    await this.handleStaySignedInPromptIfPresent();
+    await this.handleStaySignedInPromptIfPresent();    
   }
 
   private async clickPrimarySubmitIfPresent() {
@@ -71,8 +97,9 @@ export class EntraLoginPage extends BasePage {
     }
   }
 
-  private async handleTotpIfPresent() {
-    const secret = env.ENTRA_TOTP_SECRET;
+  private async handleTotpIfPresent(entraTotp?: string) {
+    const secret = entraTotp ?? "";
+    
     // Wait briefly to see if OTP field shows up
     const otpLocator = this.page.locator(entraSelectors.totpCode.join(', '));
 

@@ -1,0 +1,71 @@
+# Sätta upp initialt plaaywright project med liten Wizard. Pipelines + TypeScript
+npm init playwright@latest
+-> TypeScript
+
+# Installera browsers. Skall installera browsers men problem med certifikat
+npx playwright install
+
+# Kör alla project
+npx playwright test
+
+# Kör ett project
+npx playwright test --project firefox
+
+
+
+# Visa rapport
+npx playwright show-report
+
+Tips:
+#See the browser window: add --headed.
+#Run a single project/browser: --project=chromium.
+
+#Run one file: 
+npx playwright test tests/example.spec.ts.
+
+#Open testing UI: --ui.
+npx playwright test --ui
+
+
+
+
+System requirements
+Node.js: latest 20.x, 22.x or 24.x.
+Windows 11+, Windows Server 2019+ or Windows Subsystem for Linux (WSL).
+macOS 14 (Ventura) or later.
+Debian 12 / 13, Ubuntu 22.04 / 24.04 (x86-64 or arm64).
+
+
+
+C:\repos\playwright-v1\cdn.playwright.dev.crt.pem
+set NODE_EXTRA_CA_CERTS=C:\repos\playwright-v1\cdn.playwright.dev.crt.pem
+
+
+
+
+
+Problem med installation. Provad export av certifikat men fungerade inte.
+
+C:\repos\playwright-v1>set NODE_TLS_REJECT_UNAUTHORIZED=0
+
+C:\repos\playwright-v1>npx playwright install
+Downloading Chrome for Testing 145.0.7632.6 (playwright chromium v1208) from https://cdn.playwright.dev/builds/cft/145.0.7632.6/win64/chrome-win64.zip
+(node:34424) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+172.8 MiB [====================] 100% 0.0s
+Chrome for Testing 145.0.7632.6 (playwright chromium v1208) downloaded to C:\Users\pa_xoran\AppData\Local\ms-playwright\chromium-1208
+Downloading Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) from https://cdn.playwright.dev/builds/cft/145.0.7632.6/win64/chrome-headless-shell-win64.zip
+(node:57288) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+108.8 MiB [====================] 100% 0.0s
+Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) downloaded to C:\Users\pa_xoran\AppData\Local\ms-playwright\chromium_headless_shell-1208
+Downloading Firefox 146.0.1 (playwright firefox v1509) from https://cdn.playwright.dev/dbazure/download/playwright/builds/firefox/1509/firefox-win64.zip
+(node:28016) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+110.2 MiB [====================] 100% 0.0s
+Firefox 146.0.1 (playwright firefox v1509) downloaded to C:\Users\pa_xoran\AppData\Local\ms-playwright\firefox-1509
+Downloading WebKit 26.0 (playwright webkit v2248) from https://cdn.playwright.dev/dbazure/download/playwright/builds/webkit/2248/webkit-win64.zip
+(node:48436) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.
+(Use `node --trace-warnings ...` to show where the warning was created)
+58.7 MiB [====================] 100% 0.0s
+WebKit 26.0 (playwright webkit v2248) downloaded to C:\Users\pa_xoran\AppData\Local\ms-playwright\webkit-2248
