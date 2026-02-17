@@ -111,6 +111,17 @@ export default defineConfig({
         }]
       : []),
 
+      ...(env.BASE_URL_SITE
+      ? [{
+          name: 'sitenoauth',          
+          testMatch: /site\/.*\.spec\.ts/,
+          use: {
+            ...devices['Desktop Chrome'],
+            baseURL: env.BASE_URL_SITE            
+          },
+        }]
+      : []),
+
     ...(env.BASE_URL_SITE
       ? [{
           name: 'url',          

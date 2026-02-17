@@ -66,7 +66,7 @@ if(appName === 'editor' || appName === 'admin'){
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
 
-  //await entra.hideCookieBannerSelectAll();
+  await entra.hideCookieBannerSelectAll();
 
 
   // Save storageState for reuse
