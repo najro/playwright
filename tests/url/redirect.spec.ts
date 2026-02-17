@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { BasePage } from '@pages/BasePage';
 import { loadRedirectCsv } from '@utils/csv';
 
-const cases = loadRedirectCsv('../data/urls/redirect-urls.csv');
+const cases = loadRedirectCsv('../data/redirect-urls.csv');
  
 test.describe('URL redirects', () => {
   for (const c of cases) {
