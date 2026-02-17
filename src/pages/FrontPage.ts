@@ -1,6 +1,8 @@
 import { expect, type Locator, type Page } from "@playwright/test";
+import { BasePage } from './BasePage';
 
-export class FrontPage {
+export class FrontPage  extends BasePage {
+  
   readonly page: Page;
 
   // Locators
@@ -14,6 +16,8 @@ export class FrontPage {
   readonly footer: Locator;
 
   constructor(page: Page) {
+    super(page);
+  
     this.page = page;
 
     this.body = page.locator("body");

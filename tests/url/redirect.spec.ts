@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { BasePage } from '@pages/BasePage';
-import { loadRedirectCsv } from '@utils/csv';
+//import { BasePage } from '@pages/BasePage';
+import { loadRedirectCsv } from '@utils/csvtool';
 
 const cases = loadRedirectCsv('../data/redirect-urls.csv');
  
@@ -11,10 +11,14 @@ test.describe('URL redirects', () => {
 
       const expectedUrl = new URL(c.target, baseURL).toString();
 
-      const resultUrl = await new BasePage(page).goTo(c.source).then(p => p.getUrl());
+      //const resultUrl = await new BasePage(page).goTo(c.source).then(p => p.getUrl());
 
       //await page.goto(c.source, { waitUntil: 'load' });
       //await expect(page).toHaveURL(expectedUrl);
+        //const basePage = new BasePage(page);
+        //await basePage.Page.goto(c.source, { waitUntil: 'domcontentloaded' });
+        await page.goto(c.source, { waitUntil: 'domcontentloaded' });        
+        const resultUrl = page.url();
 
 
       expect(resultUrl).toBe(expectedUrl);

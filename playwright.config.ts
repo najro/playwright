@@ -43,95 +43,75 @@ export default defineConfig({
     navigationTimeout: 30_000,
   },
 
-  projects: [
-
-    
-
+  projects: [    
     // ---------------------------
     // Setup projects (auth)
     // ---------------------------
-    ...(env.BASE_URL_SITE
-      ? [{
-          name: 'setup-editor',
-          testMatch: /setup\/.*\.setup\.ts/,
-          use: {
-            ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_SITE,
-          },
-        }]
-      : []),
-
-    ...(env.BASE_URL_SITE
-      ? [{
-          name: 'setup-admin',
-          testMatch: /setup\/.*\.setup\.ts/,
-          use: {
-            ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_SITE,
-          },
-        }]
-      : []),
-
-       ...(env.BASE_URL_SITE
-       ? [{
-          name: 'setup-enduser',
-          testMatch: /setup\/.*\.setup\.ts/,
-          use: {
-            ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_SITE,
-          },
-        }]
-      : []),
+    {
+      name: 'setup-editor',
+      testMatch: /setup\/.*\.setup\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: env.BASE_URL_SITE,
+      },
+    }
+    ,
+    {
+      name: 'setup-admin',
+      testMatch: /setup\/.*\.setup\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: env.BASE_URL_SITE,
+      },
+    }
+    ,
+    {
+      name: 'setup-enduser',
+      testMatch: /setup\/.*\.setup\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: env.BASE_URL_SITE,
+      },
+    },
    
     // ---------------------------
     // Test projects
     // ---------------------------
-    ...(env.BASE_URL_SITE
-      ? [{
-          name: 'editor',
-          dependencies: ['setup-editor'],
-          testMatch: /editor\/.*\.spec\.ts/,
-          use: {
-            ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_SITE,
-            storageState: authStatePathFor('editor'),
-          },
-        }]
-      : []),
-
-          ...(env.BASE_URL_SITE
-      ? [{
-          name: 'site',          
-          testMatch: /site\/.*\.spec\.ts/,
-          use: {
-            ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_SITE,
-            storageState: authStatePathFor('enduser'),
-          },
-        }]
-      : []),
-
-      ...(env.BASE_URL_SITE
-      ? [{
-          name: 'sitenoauth',          
-          testMatch: /site\/.*\.spec\.ts/,
-          use: {
-            ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_SITE            
-          },
-        }]
-      : []),
-
-    ...(env.BASE_URL_SITE
-      ? [{
-          name: 'url',          
-          testMatch: /url\/.*\.spec\.ts/,
-          use: {
-            ...devices['Desktop Chrome'],
-            baseURL: env.BASE_URL_SITE,
-            storageState: authStatePathFor('enduser'),
-          },
-        }]
-      : []),
+    {
+      name: 'editor',
+      dependencies: ['setup-editor'],
+      testMatch: /editor\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: env.BASE_URL_SITE,
+        storageState: authStatePathFor('editor'),
+      },
+    },
+    {
+      name: 'site',          
+      testMatch: /site\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: env.BASE_URL_SITE,
+        storageState: authStatePathFor('enduser'),
+      },
+    },
+    {
+        name: 'sitenoauth',          
+        testMatch: /site\/.*\.spec\.ts/,
+        use: {
+          ...devices['Desktop Chrome'],
+          baseURL: env.BASE_URL_SITE            
+        },
+    },
+    {
+        name: 'url',          
+        testMatch: /url\/.*\.spec\.ts/,
+        use: {
+          ...devices['Desktop Chrome'],
+          baseURL: env.BASE_URL_SITE,
+          storageState: authStatePathFor('enduser'),
+        },
+    },
   ],
 });

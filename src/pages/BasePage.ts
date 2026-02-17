@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import { url } from 'inspector/promises';
 
 export class BasePage {
@@ -8,14 +8,11 @@ export class BasePage {
     this.page = page;
   }
 
- async goTo(url: string): Promise<this> {
-    //await this.page.goto(path);
+  async goto() {
+    await this.page.goto("/", { waitUntil: "domcontentloaded" });
+  }
 
-    //await this.page.goto(url, { waitUntil: 'load' });
-    //await this.page.waitForLoadState('networkidle');
-
-    console.log(`Navigating to ${url}...`);
-    
+  async gotoUrl(url: string): Promise<this> {      
     await this.page.goto(url, {
       waitUntil: 'domcontentloaded',
       timeout: 60000,
@@ -40,6 +37,22 @@ export class BasePage {
         } 
       }
   }
+  
+  async renderedHtml(): Promise<string> {
+    return await this.page.content();
+  }
 
+  async assertHtmlLengthGreaterThan(min = 1000) {
+    const html = await this.renderedHtml();
+    expect(
+      html.length,
+      `The page had less than ${min} characters of HTML. That probably means it's down.`
+    ).toBeGreaterThan(min);
+  }
+
+  async assertHtmlContains(searchText: string) {
+    const html = await this.renderedHtml();
+    expect(html, `Couldn't find the expected HTML code in page source: '${searchText}'`).toContain(searchText);
+  }
 
 }

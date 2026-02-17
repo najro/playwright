@@ -1,10 +1,10 @@
-import { test } from "@playwright/test";
+import { test, expect } from '@fixtures/index';
 import { FrontPage } from "@pages/FrontPage";
 
 test("frontpage structure sanity checks", async ({ page }) => {
   
   const frontPage = new FrontPage(page);
-
+  
   await frontPage.goto();  
   // Option A: keep checks explicit
   await frontPage.expectBodyHasFrontpageClass();
