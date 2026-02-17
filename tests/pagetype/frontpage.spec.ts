@@ -1,7 +1,7 @@
 import { test, expect } from '@fixtures/index';
-import { FrontPage } from "@pages/FrontPage";
+import { FrontPage } from "src/pom/FrontPage";
 
-test("frontpage structure sanity checks", async ({ page }) => {
+test("Frontpage structure sanity checks", async ({ page }) => {
   
   const frontPage = new FrontPage(page);
   
@@ -15,6 +15,6 @@ test("frontpage structure sanity checks", async ({ page }) => {
   await frontPage.expectFooterVisible();
 
   // Option B: single call (if you prefer)
-  // await frontPage.expectStructureSanity();
+  await frontPage.expectStructureSanity();
 });
 

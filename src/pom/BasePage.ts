@@ -25,18 +25,38 @@ export class BasePage {
     return this.page.url();
   }
 
-  async hideCookieBannerSelectAll() {
-      const cookieBanner = this.page.locator('#cookieApiData');
 
-      if (await cookieBanner.isVisible()) {
-      
-        const acceptAllButton = cookieBanner.locator('#userSelectAll');
-      
-        if (await acceptAllButton.isVisible()) {
-          await acceptAllButton.click();
-        } 
-      }
+async hideCookieBannerSelectAll() {
+  const banner = this.page.locator('#cookieApiData');
+  const acceptAll = banner.locator('#userSelectAll');
+
+  // If it never appears, we're done.
+  try {
+    await banner.waitFor({ state: 'visible', timeout: 3000 });
+  } catch {
+    return;
   }
+
+  // If it's visible, try to accept
+  try {
+    await acceptAll.waitFor({ state: 'visible', timeout: 3000 });
+    await acceptAll.click();
+  } catch {
+    // button missing or not clickable; don't block auth flow
+    return;
+  }
+
+  // Wait for banner to close (UI confirmation)
+  await banner.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+
+  // OPTIONAL: wait for persistence, but do not require it
+  await this.page.waitForFunction(
+    () => document.cookie.length > 0 || Object.keys(localStorage).length > 0,
+    null,
+    { timeout: 2000 }
+  ).catch(() => {});
+}
+
   
   async renderedHtml(): Promise<string> {
     return await this.page.content();
@@ -55,4 +75,8 @@ export class BasePage {
     expect(html, `Couldn't find the expected HTML code in page source: '${searchText}'`).toContain(searchText);
   }
 
+  async expectTextToBeVisible(text: string): Promise<void> {
+    await expect(this.page.getByText(text)).toBeVisible();
+  }
+  
 }

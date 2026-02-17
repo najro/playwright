@@ -66,7 +66,7 @@ export default defineConfig({
     }
     ,
     {
-      name: 'setup-enduser',
+      name: 'setup-visitor',
       testMatch: /setup\/.*\.setup\.ts/,
       use: {
         ...devices['Desktop Chrome'],
@@ -78,40 +78,31 @@ export default defineConfig({
     // Test projects
     // ---------------------------
     {
-      name: 'editor',
-      dependencies: ['setup-editor'],
-      testMatch: /editor\/.*\.spec\.ts/,
+      name: 'pagetype',      
+      testMatch: /pagetype\/.*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: env.BASE_URL_SITE,
-        storageState: authStatePathFor('editor'),
+        storageState: authStatePathFor('visitor'),
       },
     },
     {
-      name: 'site',          
-      testMatch: /site\/.*\.spec\.ts/,
+      name: 'redirect',          
+      testMatch: /redirect\/.*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: env.BASE_URL_SITE,
-        storageState: authStatePathFor('enduser'),
+        storageState: authStatePathFor('visitor'),
       },
     },
     {
-        name: 'sitenoauth',          
+        name: 'site',          
         testMatch: /site\/.*\.spec\.ts/,
         use: {
           ...devices['Desktop Chrome'],
-          baseURL: env.BASE_URL_SITE            
-        },
-    },
-    {
-        name: 'url',          
-        testMatch: /url\/.*\.spec\.ts/,
-        use: {
-          ...devices['Desktop Chrome'],
           baseURL: env.BASE_URL_SITE,
-          storageState: authStatePathFor('enduser'),
+          storageState: authStatePathFor('visitor'),      
         },
-    },
+    }
   ],
 });

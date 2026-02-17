@@ -17,7 +17,7 @@
         "src/config/*"
       ],
       "@pages/*": [
-        "src/pages/*"
+        "src/pom/*"
       ],
       "@utils/*": [
         "src/utils/*"

@@ -1,6 +1,6 @@
 url;text;search
 /no/id4/;PortalForside;class="mainContentArea"
-/no/id4/;PortalForside - Lenkeliste gr� bokser ;class="top-tasks"
+/no/id4/;PortalForside - Lenkeliste grå bokser ;class="top-tasks"
 /no/id4/;PortalForside - megameny har lenker;class="megaMenuItem"
 /no/dep/id933/;Departementliste;class="mainContentArea"
 /no/dep/id933/;Departementliste - Lenke til UD;href="/no/dep/ud/id833/"
@@ -11,8 +11,8 @@ url;text;search
 /no/sub/radikalisering/id2001759/;Subnettsted - Radikalisering;<h1>Radikalisering</h1>
 /no/sub/radikalisering/politiet/id663871/;Side - Har egen eier under Radikalisering;<a href="/no/sub/radikalisering/id2001759/">Radikalisering</a>
 /no/dokument/bestilling-av-publikasjoner/id439327/;Artikkel side;class="mainContentArea"
-/no/tema/id208/;Indekside a-�;class="mainContentArea"
-/no/tema/id208/;Indekside a-� - Sorteringslenke;sort=flat
+/no/tema/id208/;Indekside a-å;class="mainContentArea"
+/no/tema/id208/;Indekside a-å - Sorteringslenke;sort=flat
 /no/tema/miljo/id925/;Temaside;class="mainContentArea"
 /no/tema/miljo/id925/;Temaside - Kontakt;department-contact
 /no/tema/energi/id212/;Temaside viser undertema;href="/no/tema/energi/fornybar-energi/id2000124/"
@@ -22,15 +22,15 @@ url;text;search
 /no/tema/arbeidsliv/arbeidsmarked-og-sysselsetting/innsikt/den-norske-arbeidsmarknaden/hva-er-dagpenger/id573563/;Artikkel side - sist oppdatert;class="date"
 /no/tema/arbeidsliv/arbeidsmarked-og-sysselsetting/innsikt/den-norske-arbeidsmarknaden/hva-er-dagpenger/id573563/;Artikkel side - eier info;class="content-owner-dep"
 /no/tema/arbeidsliv/arbeidsmarked-og-sysselsetting/innsikt/den-norske-arbeidsmarknaden/hva-er-dagpenger/id573563/;Artikkel side - Til toppen;href="#top-of-page"
-/no/sok/id86008/?term=erna;S�keside - Erna gir treff;class="listItem"
+/no/sok/id86008/?term=erna;Søkeside - Erna gir treff;class="listItem"
 /no/dokumentarkiv/id115322/;Historisk arkiv - Eget visuelt uttrykk;class="historic-label"
 /no/dokumentarkiv/id115322/;Historisk arkiv - Regjering faset;Regjeringen Bondevik II
 /no/dokumentarkiv/id115322/?term=jens;Historisk arkiv - Jens gir treff;class="listItem"
 /no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/fd/pressemeldinger/2019/norge-blir-med-i-europeisk-forsvarssamarbeid/id2669547/;Historisk arkiv - Utgiver info;Regjeringen Solberg
 /no/dokumentarkiv/regjeringen-solberg/andre-dokumenter/asd/2013/arbeids--og-sosialminister-robert-erikss/id742894/;Historisk arkiv - Ministerside;class="content-baseperson-persons"
-/no/sub/eos-notatbasen/sok/id615429/?term=32015R0180;S�k i E�S-notatene;Basis rettsaktnr
-/no/sub/eos-notatbasen/sok/id615429/;S�k i E�S-notatene - Fasett 1;aria-labelledby="labelSakstrinn"
-/no/sub/eos-notatbasen/sok/id615429/;S�k i E�S-notatene - Fasett 2;aria-labelledby="labelEØS-avtalen"
+/no/sub/eos-notatbasen/sok/id615429/?term=32015R0180;Søk i EØS-notatene;Basis rettsaktnr
+/no/sub/eos-notatbasen/sok/id615429/;Søk i EØS-notatene - Fasett 1;aria-labelledby="labelSakstrinn"
+/no/sub/eos-notatbasen/sok/id615429/;Søk i EØS-notatene - Fasett 2;aria-labelledby="labelEØS-avtalen"
 /no/dep/smk/organisasjonskart/avdelinger/komm/kommunikasjonsradgivernettredaktor-roger-holmsen/id654124/;Person i administrasjon;class="content-baseperson-persons"
 /no/om-regjeringa/id443314/;Landingsside;content-row
 /no/dep/smk/organisasjonskart/avdelinger/komm/id1704/;Avdeling;<h1>Kommunikasjonsseksjonen ved Statsministerens kontor</h1>
@@ -38,21 +38,21 @@ url;text;search
 /no/dep/fin/org/avdelinger/fa/id1544/;Avdeling - Lister seksjoner;Statsforvaltningsseksjonen 
 /no/dep/fin/org/avdelinger/fa/sbs/id445829/;Seksjon ingress;class="content-row header-row ingress-row page-article"
 /no/dep/ud/org/avdelinger/globalavdelingen/seksjon-for-fn-politikk/id3115550/;Seksjon kontakt;<h2 class="title">Kontakt</h2>
-/no/dokumenter/horing---innstramminger-i-reglene-om-off/id749766/;H�ring;class="horing-meta content-row"
+/no/dokumenter/horing---innstramminger-i-reglene-om-off/id749766/;Høring;class="horing-meta content-row"
 /no/dokumenter/prop-1-ls-tillegg-1-2013-2014/id745306/;Proposisjon;class="mainContentArea longdoc"
 /no/dokumenter/nou-2013-4/id715404/?ch=4;Nou;class="K-DEL-DEL"
 /no/aktuelt/samenes-folkerettslige-vern-skal-sikres/id2892159/;Tale holdt av;Olje- og energiminister Marte Mjøs Persen
 /no/aktuelt/na-trer-barnevernsreformen-i-kraft/id2893511/;Relatert relasjon;link-list-item__meta
 /no/dokument/dep/nfd/sak/dagligvare/id2924715/;Saksgang;class="vertical-timeline"
-/no/dep/ud/dep/id838/;Side - Eier Bokm�l;<a href="/no/dep/ud/id833/">Utenriksdepartementet</a>
+/no/dep/ud/dep/id838/;Side - Eier Bokmål;<a href="/no/dep/ud/id833/">Utenriksdepartementet</a>
 /se/dep/ud/olgoriikadepartemeanta/id440423/;Side - Eier Samisk;<a href="/se/dep/ud/id833/">Olgoriikadepartemeanta</a>
 /no/dokumenter/rapport-om-okonomiske-misleghaldssaker-osb.-i-andre-kvartal-2023/id2990150/;Side - Eier Nynorsk;<a href="/no/dep/ud/id833/">Utanriksdepartementet</a>
 /en/dep/ud/about_mfa/id838/;Side - Eier Engelsk;<a href="/en/dep/ud/id833/">Ministry of Foreign Affairs</a>
-/no/tema/utenrikssaker/id919/;Nyhetsvarsel - p�melding - Tema;class="btn btn-no-icon subscribe"
-/no/dep/sd/id791;Nyhetsvarsel - p�melding - Departement;class="btn btn-no-icon subscribe"
-/no/dokument/hoyringar/id1763/;Nyhetsvarsel - p�melding - Blokk;<button type="button" class="btn btn-no-icon subscribe" data-open="">Abonner på nyheitsvarsel</button>
-/no/system/nyhetsvarsling/Manage/?subscriptionId=1a304ffd-893a-4bcf-80cb-430ead79b47f;Nyhetsvarsel - admin - eksisterende abonnment p� arbeidsliv i oppsummering;<span class="factbox-title-text">Arbeidsliv</span>
-/no/system/nyhetsvarsling/Manage/?subscriptionId=1a304ffd-893a-4bcf-80cb-430ead79b47f;Nyhetsvarsel - admin - har fane for engelsk spr�k;data-tab-target="lang-tab-enGB"
+/no/tema/utenrikssaker/id919/;Nyhetsvarsel - påmelding - Tema;class="btn btn-no-icon subscribe"
+/no/dep/sd/id791;Nyhetsvarsel - påmelding - Departement;class="btn btn-no-icon subscribe"
+/no/dokument/hoyringar/id1763/;Nyhetsvarsel - påmelding - Blokk;<button type="button" class="btn btn-no-icon subscribe" data-open="">Abonner på nyheitsvarsel</button>
+/no/system/nyhetsvarsling/Manage/?subscriptionId=1a304ffd-893a-4bcf-80cb-430ead79b47f;Nyhetsvarsel - admin - eksisterende abonnment på arbeidsliv i oppsummering;<span class="factbox-title-text">Arbeidsliv</span>
+/no/system/nyhetsvarsling/Manage/?subscriptionId=1a304ffd-893a-4bcf-80cb-430ead79b47f;Nyhetsvarsel - admin - har fane for engelsk språk;data-tab-target="lang-tab-enGB"
 /no/om-regjeringa/tidligere-regjeringer-og-historie/sok-i-regjeringer-siden-1814/regjeringspolitiker/id2578016/?personId=1136;Historisk politiker;<h3>Statsminister  (H)</h3>
 /no/om-regjeringa/tidligere-regjeringer-og-historie/sok-i-regjeringer-siden-1814/historisk-departement/id2578017/?dep=DEP_POD_1885_05_01;Historisk departement;Opprettet: 1. mai 1885
 /no/om-regjeringa/tidligere/ministerier_regjeringer/nyere_tid/regjeringer/kjell-magne-bondeviks-andre-regjering-20/id438739/;Historisk regjering;<span data-amount="">22</span>
