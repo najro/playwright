@@ -83,7 +83,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: env.BASE_URL_SITE,
-        storageState: authStatePathFor('visitor'),
+        storageState: authStatePathFor('editor'), // Example: pagetype tests run as authenticated editor
       },
     },
     {

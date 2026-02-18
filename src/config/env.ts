@@ -40,24 +40,15 @@ const EnvSchema = z.object({
   PW_ENV: z.string().default('local'),
 
   BASE_URL_SITE: z.string().url().optional(),
-  /*BASE_URL_CMS: z.string().url().optional(),*/
+  BASE_URL_CMS: z.string().url().optional(),
 
   POST_LOGIN_PATH_SITE: z.string().optional(),
   POST_LOGIN_PATH_CMS: z.string().optional(),
 
-  ENTRA_EDITOR_USERNAME: z.string().min(1, 'ENTRA_EDITOR_USERNAME is required'),
-  ENTRA_EDITOR_PASSWORD: z.string().min(1, 'ENTRA_EDITOR_PASSWORD is required'),
-  ENTRA_EDITOR_TOTP_SECRET: z.string().optional(),
+  OPTIMIZELY_CMS_EDITOR_TOKEN: z.string().min(1, 'OPTIMIZELY_CMS_EDITOR_TOKEN is required'),
+  OPTIMIZELY_CMS_ADMIN_TOKEN: z.string().min(1, 'OPTIMIZELY_CMS_ADMIN_TOKEN is required'),
 
-  ENTRA_ADMIN_USERNAME: z.string().min(1, 'ENTRA_ADMIN_USERNAME is required'),
-  ENTRA_ADMIN_PASSWORD: z.string().min(1, 'ENTRA_ADMIN_PASSWORD is required'),
-  ENTRA_ADMIN_TOTP_SECRET: z.string().optional(),
-
-
-  ENTRA_STAY_SIGNED_IN: z
-    .string()
-    .optional()
-    .transform(v => (v ?? 'false').toLowerCase() === 'true'),
+  PERCY_TOKEN: z.string().min(1, 'PERCY_TOKEN is required'),
 
   CI: z
     .string()

@@ -29,8 +29,6 @@ test.describe('URL redirects', () => {
   }
 
 
-
-
       // if (!baseURL) throw new Error('baseURL is not set');
 
       // const sourceUrl = new URL(c.source, baseURL).toString();
