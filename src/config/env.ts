@@ -34,16 +34,11 @@ export function loadDotenv() {
  * You can make per-project values optional and conditionally include projects in the config.
  */
 const EnvSchema = z.object({
-
-  AUTO_LOGIN: z.string().optional().transform(v => (v ?? 'false').toLowerCase() === 'true'),
-  
+    
   PW_ENV: z.string().default('local'),
 
   BASE_URL_SITE: z.string().min(1, 'BASE_URL_SITE is required'),
   BASE_URL_CMS: z.string().min(1, 'BASE_URL_CMS is required'),
-
-  POST_LOGIN_PATH_SITE: z.string().default('/'),
-  POST_LOGIN_PATH_CMS: z.string().default('/'),
 
   OPTIMIZELY_CMS_EDITOR_TOKEN: z.string().min(1, 'OPTIMIZELY_CMS_EDITOR_TOKEN is required'),
   OPTIMIZELY_CMS_ADMIN_TOKEN: z.string().min(1, 'OPTIMIZELY_CMS_ADMIN_TOKEN is required'),

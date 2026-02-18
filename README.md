@@ -156,6 +156,8 @@ Validated in `src/config/env.ts` using `zod`.
 
 ### Required
 
+- `BASE_URL_SITE`
+- `BASE_URL_CMS`
 - `OPTIMIZELY_CMS_EDITOR_TOKEN`
 - `OPTIMIZELY_CMS_ADMIN_TOKEN`
 - `PERCY_TOKEN`
@@ -163,10 +165,6 @@ Validated in `src/config/env.ts` using `zod`.
 ### Optional
 
 - `PW_ENV` (default: `local`)
-- `BASE_URL_SITE` (URL)
-- `BASE_URL_CMS` (URL)
-- `POST_LOGIN_PATH_SITE`
-- `POST_LOGIN_PATH_CMS`
 - `CI` (parsed to boolean)
 
 ### Dotenv loading order
@@ -301,3 +299,4 @@ Check required variables in `.env` or pipeline variables. Validation errors are 
 ### Redirect tests flaky on file targets
 
 `redirect.spec.ts` treats PDF targets specially and accepts either a download event or direct response. Confirm target CSV entries resolve against current `BASE_URL_SITE`.
+
