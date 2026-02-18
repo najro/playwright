@@ -13,7 +13,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  NODE_VERSION: '20.x'
+  NODE_VERSION: '24.11.0' # Use the Node.js version compatible with your project
 
 steps:
 - task: NodeTool@0
@@ -29,31 +29,113 @@ steps:
     npx playwright install --with-deps
   displayName: 'Install Playwright browsers'
 
-# Set env vars here or in pipeline variable groups / Key Vault
+# Run setup projects first
 - script: |
-    echo "Running Playwright tests..."
-    npx playwright test --project=portal
-  displayName: 'Run Portal tests'
+    rm -rf playwright-report test-results
+    echo "Running setup projects..."
+    npx playwright test --project=setup-editor --project=setup-admin --project=setup-visitor
+  displayName: 'Run setup projects'
   env:
     CI: 'true'
     PW_ENV: 'dev'
-    BASE_URL_PORTAL: '$(BASE_URL_PORTAL)'
-    ENTRA_USERNAME: '$(ENTRA_USERNAME)'
-    ENTRA_PASSWORD: '$(ENTRA_PASSWORD)'
-    ENTRA_TOTP_SECRET: '$(ENTRA_TOTP_SECRET)'
-    ENTRA_STAY_SIGNED_IN: 'false'
+    BASE_URL_SITE: '$(BASE_URL_SITE)'
+    BASE_URL_CMS: '$(BASE_URL_CMS)'
+    OPTIMIZELY_CMS_EDITOR_TOKEN: '$(OPTIMIZELY_CMS_EDITOR_TOKEN)'
+    OPTIMIZELY_CMS_ADMIN_TOKEN: '$(OPTIMIZELY_CMS_ADMIN_TOKEN)'
+    PERCY_TOKEN: '$(PERCY_TOKEN)'
+
+# Run pagetype and publish results/report
+- script: |
+    rm -rf playwright-report test-results
+    echo "Running pagetype project..."
+    npx playwright test --project=pagetype
+  displayName: 'Run pagetype tests'
+  condition: succeededOrFailed()
+  env:
+    CI: 'true'
+    PW_ENV: 'dev'
+    BASE_URL_SITE: '$(BASE_URL_SITE)'
+    BASE_URL_CMS: '$(BASE_URL_CMS)'
+    OPTIMIZELY_CMS_EDITOR_TOKEN: '$(OPTIMIZELY_CMS_EDITOR_TOKEN)'
+    OPTIMIZELY_CMS_ADMIN_TOKEN: '$(OPTIMIZELY_CMS_ADMIN_TOKEN)'
+    PERCY_TOKEN: '$(PERCY_TOKEN)'
 
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: 'test-results/junit.xml'
     failTaskOnFailedTests: true
+    failTaskOnMissingResultsFile: false
   condition: succeededOrFailed()
-  displayName: 'Publish test results'
+  displayName: 'Publish pagetype test results'
 
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: 'playwright-report'
-    artifactName: 'playwright-report'
+    artifactName: 'playwright-report-pagetype'
   condition: succeededOrFailed()
-  displayName: 'Publish Playwright HTML report'
+  displayName: 'Publish pagetype HTML report'
+
+# Run redirect and publish results/report
+- script: |
+    rm -rf playwright-report test-results
+    echo "Running redirect project..."
+    npx playwright test --project=redirect
+  displayName: 'Run redirect tests'
+  condition: succeededOrFailed()
+  env:
+    CI: 'true'
+    PW_ENV: 'dev'
+    BASE_URL_SITE: '$(BASE_URL_SITE)'
+    BASE_URL_CMS: '$(BASE_URL_CMS)'
+    OPTIMIZELY_CMS_EDITOR_TOKEN: '$(OPTIMIZELY_CMS_EDITOR_TOKEN)'
+    OPTIMIZELY_CMS_ADMIN_TOKEN: '$(OPTIMIZELY_CMS_ADMIN_TOKEN)'
+    PERCY_TOKEN: '$(PERCY_TOKEN)'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'test-results/junit.xml'
+    failTaskOnFailedTests: true
+    failTaskOnMissingResultsFile: false
+  condition: succeededOrFailed()
+  displayName: 'Publish redirect test results'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: 'playwright-report'
+    artifactName: 'playwright-report-redirect'
+  condition: succeededOrFailed()
+  displayName: 'Publish redirect HTML report'
+
+# Run site and publish results/report
+- script: |
+    rm -rf playwright-report test-results
+    echo "Running site project..."
+    npx playwright test --project=site
+  displayName: 'Run site tests'
+  condition: succeededOrFailed()
+  env:
+    CI: 'true'
+    PW_ENV: 'dev'
+    BASE_URL_SITE: '$(BASE_URL_SITE)'
+    BASE_URL_CMS: '$(BASE_URL_CMS)'
+    OPTIMIZELY_CMS_EDITOR_TOKEN: '$(OPTIMIZELY_CMS_EDITOR_TOKEN)'
+    OPTIMIZELY_CMS_ADMIN_TOKEN: '$(OPTIMIZELY_CMS_ADMIN_TOKEN)'
+    PERCY_TOKEN: '$(PERCY_TOKEN)'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'test-results/junit.xml'
+    failTaskOnFailedTests: true
+    failTaskOnMissingResultsFile: false
+  condition: succeededOrFailed()
+  displayName: 'Publish site test results'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: 'playwright-report'
+    artifactName: 'playwright-report-site'
+  condition: succeededOrFailed()
+  displayName: 'Publish site HTML report'

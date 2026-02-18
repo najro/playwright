@@ -1,4 +1,4 @@
-import { test as setup, expect } from '@playwright/test';
+import { test as setup } from '@playwright/test';
 import { OptimizelyLoginPage } from 'src/pom/OptimizelyLoginPage';
 import { env } from '@config/env';
 import { authStatePathFor } from '@config/paths';
@@ -24,8 +24,6 @@ setup('authenticate and save storageState', async ({ page }, testInfo) => {
     await optimizelyPage.loginAuto(env.OPTIMIZELY_CMS_EDITOR_TOKEN);    
   }else if(appName === 'admin'){
     await optimizelyPage.loginAuto(env.OPTIMIZELY_CMS_ADMIN_TOKEN);
-  }else{
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
   }
 
   await optimizelyPage.goToStartPage();
