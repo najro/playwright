@@ -1,230 +1,303 @@
-# Playwright + Entra ID (MFA) template (TypeScript)
+﻿# playwright-regjeringen
 
-This is a future-proof Playwright E2E test template designed for:
+End-to-end test automation for `regjeringen.no`/Optimizely CMS using Playwright + TypeScript.
 
-- **Multi-project test execution** (run `portal`, `admin`, etc. independently)
-- **Project dependencies** using Playwright’s built-in `dependencies` feature:
-  - Each `<app>` project depends on `setup-<app>` which performs authentication
-- **Entra ID authentication + optional MFA** using **TOTP** (Authenticator App / OATH secret)
-- **Environment-based configuration** via environment variables and `.env` files
-- **POM (Page Object Model)** to keep tests clean and resilient
-- **Azure DevOps pipeline** example (`azure-pipelines.yml`)
+This project uses:
+- role-token based login setup (editor/admin)
+- reusable Playwright storage state per role
+- CSV-driven regression checks
+- Page Object Model (POM) + shared fixtures
+- Azure DevOps pipeline execution and reporting
 
-> ⚠️ Important note about MFA in CI  
-> Many Entra MFA methods are *not* automation-friendly (push notifications, phone calls, etc.).  
-> This template assumes you use **TOTP** (a shared secret) for the test user. In practice, teams usually:
-> - use a **dedicated test tenant / test user**
-> - configure Conditional Access so the test user can use **TOTP** on build agents  
-> Store the secret in Azure DevOps Library / Key Vault.
+## Tech stack
 
----
+- Node.js + npm
+- TypeScript
+- Playwright Test (`@playwright/test`)
+- `dotenv` + `zod` for env loading and validation
 
-## Folder structure
+## Current project layout
 
-```
+```text
 .
-├─ playwright.config.ts
-├─ package.json
-├─ azure-pipelines.yml
-├─ .env.example
-├─ scripts/
-│  └─ cleanAuthState.js
-├─ src/
-│  ├─ config/
-│  │  ├─ env.ts            # dotenv loading + env validation (zod)
-│  │  ├─ paths.ts          # storageState paths
-│  │  └─ selectors.ts      # Entra selectors (centralized)
-│  ├─ pages/
-│  │  ├─ BasePage.ts
-│  │  ├─ EntraLoginPage.ts # Entra login flow (+ optional MFA)
-│  │  └─ AppHomePage.ts    # Example app page
-│  ├─ fixtures/
-│  │  └─ index.ts          # optional base test fixture
-│  └─ utils/
-│     ├─ locators.ts       # helper for resilient selectors
-│     └─ totp.ts           # TOTP generator
-└─ tests/
-   ├─ setup/
-   │  └─ auth.setup.ts     # executed by setup-<app> projects
-   ├─ portal/
-   │  └─ smoke.spec.ts
-   └─ admin/
-      └─ smoke.spec.ts
+|- playwright.config.ts
+|- azure-pipelines.yml
+|- package.json
+|- scripts/
+|  |- cleanAuthState.js
+|- src/
+|  |- config/
+|  |  |- env.ts
+|  |  |- paths.ts
+|  |  |- selectors.ts
+|  |- fixtures/
+|  |  |- index.ts
+|  |- pom/
+|  |  |- BasePage.ts
+|  |  |- AppHomePage.ts
+|  |  |- OptimizelyLoginPage.ts
+|  |  |- FrontPage.ts
+|  |  |- CalendarPage.ts
+|  |- utils/
+|  |  |- csvtool.ts
+|  |  |- locators.ts
+|- tests/
+|  |- setup/
+|  |  |- auth.setup.ts
+|  |- pagetype/
+|  |  |- basicpagetypes.spec.ts
+|  |  |- frontpage.spec.ts
+|  |  |- calendarpage.spec.ts
+|  |  |- smoke.spec.ts
+|  |- redirect/
+|  |  |- redirect.spec.ts
+|  |- site/
+|  |  |- langauge-menu-spec.ts
+|  |- data/
+|     |- basic-page-types-urls.csv
+|     |- redirect-urls.csv
+|- .auth/                     (generated, gitignored)
+|- playwright-report/         (generated)
+|- test-results/              (generated)
 ```
 
-Auth state is stored in:
+## Test architecture
 
+### Playwright projects
+Defined in `playwright.config.ts`:
+
+Setup projects:
+- `setup-editor`
+- `setup-admin`
+- `setup-visitor`
+
+Execution projects:
+- `pagetype`
+- `redirect`
+- `site`
+
+All projects use `Desktop Chrome` and `BASE_URL_SITE` as `baseURL`.
+
+### Storage state strategy
+
+- Setup test: `tests/setup/auth.setup.ts`
+- Storage path helper: `src/config/paths.ts`
+- Storage files: `.auth/<PW_ENV>/<role>.storageState.json`
+
+`auth.setup.ts` maps setup project name to role:
+- `setup-editor` -> `editor`
+- `setup-admin` -> `admin`
+- `setup-visitor` -> `visitor`
+
+Login behavior:
+- editor uses `OPTIMIZELY_CMS_EDITOR_TOKEN`
+- admin uses `OPTIMIZELY_CMS_ADMIN_TOKEN`
+- visitor does not impersonate via token, but still saves storage state
+
+### Fixtures and POM
+
+Shared fixtures in `src/fixtures/index.ts` provide:
+- `home` (`AppHomePage`)
+- `frontpage` (`FrontPage`)
+- `calendarpage` (`CalendarPage`)
+
+`BasePage` contains shared navigation/assertion helpers, including cookie banner handling (`#cookieApiData` + `#userSelectAll`).
+
+## Test suites
+
+### `pagetype` project
+
+- `tests/pagetype/basicpagetypes.spec.ts`
+  - CSV-driven source checks from `tests/data/basic-page-types-urls.csv`
+  - Per row: open URL -> assert HTML length > 1000 -> assert expected HTML fragment exists
+
+- `tests/pagetype/frontpage.spec.ts`
+  - Validates front page structure (top tasks count, insight cards, carousel placement, footer visibility)
+
+- `tests/pagetype/calendarpage.spec.ts`
+  - Opens a calendar URL, clicks `show more`, verifies expected text becomes visible
+
+- `tests/pagetype/smoke.spec.ts`
+  - Basic authenticated smoke using `AppHomePage` (`/start/cms`)
+
+### `redirect` project
+
+- `tests/redirect/redirect.spec.ts`
+  - CSV-driven redirect validation from `tests/data/redirect-urls.csv`
+  - Handles both:
+    - normal URL redirects (`waitForURL`)
+    - PDF/download redirects (download event or direct response)
+
+### `site` project
+
+- `tests/site/langauge-menu-spec.ts` currently exists but is empty.
+
+## CSV data contracts
+
+### Redirect CSV (`tests/data/redirect-urls.csv`)
+Required header:
+
+```text
+source;description;target
 ```
-.auth/<PW_ENV>/<app>.storageState.json
+
+### Page type CSV (`tests/data/basic-page-types-urls.csv`)
+Required header:
+
+```text
+url;text;search
 ```
 
-`.auth/` is gitignored.
+The CSV parser is in `src/utils/csvtool.ts` and will throw on missing required columns or incomplete rows.
 
----
+## Environment variables
 
-## 1) Install
+Validated in `src/config/env.ts` using `zod`.
 
-### Prerequisites
-- Node.js **20+** recommended (18+ typically works too)
-- A test user in Entra ID (Microsoft Entra ID / Azure AD)
+### Required
 
-### Steps
+- `OPTIMIZELY_CMS_EDITOR_TOKEN`
+- `OPTIMIZELY_CMS_ADMIN_TOKEN`
+- `PERCY_TOKEN`
 
-```bash
-npm install
-npx playwright install --with-deps
-```
+### Optional
 
----
+- `PW_ENV` (default: `local`)
+- `BASE_URL_SITE` (URL)
+- `BASE_URL_CMS` (URL)
+- `POST_LOGIN_PATH_SITE`
+- `POST_LOGIN_PATH_CMS`
+- `CI` (parsed to boolean)
 
-## 2) Configure environment variables
+### Dotenv loading order
 
-Copy the example file:
-
-```bash
-cp .env.example .env.local
-```
-
-Edit `.env.local`:
-
-- `BASE_URL_PORTAL` and/or `BASE_URL_ADMIN`
-- `ENTRA_USERNAME`, `ENTRA_PASSWORD`
-- (optional, but recommended for CI) `ENTRA_TOTP_SECRET`
-
-### Environment file strategy
-
-- `.env` — shared defaults (optional)
-- `.env.<PW_ENV>` — env-specific (optional)
-- `.env.local` — developer-machine override (recommended)
-
-The loader order is:
-
+Loaded in this order (later overrides earlier):
 1. `.env`
 2. `.env.<PW_ENV>`
 3. `.env.local`
 
-Values loaded later override earlier ones.
+Note: repository currently includes `.env` but no `.env.example` template file.
 
----
-
-## 3) Run tests
-
-### Run the portal project
+## Install
 
 ```bash
-npm run test:portal
+npm ci
+npx playwright install --with-deps
 ```
 
-What happens:
-
-1. Playwright runs project `setup-portal`
-2. It logs in through Entra and saves `.auth/<PW_ENV>/portal.storageState.json`
-3. Playwright runs project `portal` using that storageState automatically
-
-### Run admin
-
-```bash
-npm run test:admin
-```
+## Local usage
 
 ### Run everything
 
 ```bash
+npm test
+# same as
 npm run test:all
 ```
 
-### Clean auth state (force a fresh login)
+### Run setup only
+
+```bash
+npm run test:setup-editor
+npm run test:setup-admin
+npm run test:setup-visitor
+```
+
+### Run test projects
+
+```bash
+npm run test:pagetype
+npm run test:redirect
+npm run test:site
+```
+
+### Debugging and report
+
+```bash
+npm run test:ui
+npm run test:debug
+npm run report
+```
+
+### Utilities
 
 ```bash
 npm run clean:auth
+npm run codegen:portal
 ```
 
----
+`clean:auth` deletes `.auth` recursively to force fresh login state generation.
 
-## 4) How MFA (TOTP) works here
+## Playwright runtime settings
 
-If Entra prompts for a verification code, the template:
+From `playwright.config.ts`:
 
-1. detects an OTP input field
-2. generates a TOTP from `ENTRA_TOTP_SECRET`
-3. submits it
+- `timeout`: 60s
+- `expect.timeout`: 10s
+- `actionTimeout`: 15s
+- `navigationTimeout`: 30s
+- `fullyParallel`: `true`
+- retries: `2` in CI, `0` locally
+- workers: `2` in CI, default locally
+- artifacts:
+  - trace: `retain-on-failure`
+  - screenshot: `only-on-failure`
+  - video: `retain-on-failure`
+- headed locally, headless in CI
+- reporters:
+  - list
+  - html (`playwright-report`)
+  - junit (`test-results/junit.xml`)
 
-If Entra asks for MFA but `ENTRA_TOTP_SECRET` is empty, the setup test fails with a clear error.
+## Path aliases
 
-> To use TOTP, your test account must be configured with an Authenticator App / OATH secret in Entra.
+Configured in `tsconfig.json`:
 
----
+- `@config/*` -> `src/config/*`
+- `@pages/*` -> `src/pom/*`
+- `@utils/*` -> `src/utils/*`
+- `@fixtures/*` -> `src/fixtures/*`
 
-## 5) Add more apps / projects
+## CI pipeline (Azure DevOps)
 
-To add a new application called `billing`:
+`azure-pipelines.yml` currently does:
 
-1. Add a new env var:
-   - `BASE_URL_BILLING=...`
-2. Add a folder:
-   - `tests/billing/*.spec.ts`
-3. Add two projects in `playwright.config.ts`:
-   - `setup-billing` (auth)
-   - `billing` (real tests) with `dependencies: ['setup-billing']` and `storageState: authStatePathFor('billing')`
+1. Use Node `24.11.0`
+2. `npm ci`
+3. `npx playwright install --with-deps`
+4. Run setup projects (`setup-editor`, `setup-admin`, `setup-visitor`)
+5. Run `pagetype`, publish JUnit + HTML report artifact
+6. Run `redirect`, publish JUnit + HTML report artifact
+7. Run `site`, publish JUnit + HTML report artifact
 
-That’s it.
+Pipeline env vars expected:
+- `BASE_URL_SITE`
+- `BASE_URL_CMS`
+- `OPTIMIZELY_CMS_EDITOR_TOKEN`
+- `OPTIMIZELY_CMS_ADMIN_TOKEN`
+- `PERCY_TOKEN`
+- plus runtime values `CI=true` and `PW_ENV=dev`
 
----
+## Known gaps and follow-ups
 
-## 6) Make tests stable (recommended practices)
-
-- Prefer `data-testid` selectors in your app.
-- Avoid brittle CSS selectors.
-- Keep login details isolated to **setup** projects (already done here).
-- Keep one source of truth for URLs and secrets (env vars).
-- Use traces/screenshots/video only on failure (already configured).
-
----
-
-## 7) Azure DevOps pipeline
-
-See `azure-pipelines.yml`.
-
-Recommended secrets in Azure DevOps:
-- `BASE_URL_PORTAL`
-- `ENTRA_USERNAME`
-- `ENTRA_PASSWORD`
-- `ENTRA_TOTP_SECRET`
-
-The sample pipeline runs the `portal` project and publishes:
-- JUnit test results
-- Playwright HTML report artifact
-
----
-
-## Customization checklist
-
-For a real product you typically customize these parts:
-
-- `tests/*/*.spec.ts` assertions (use your app’s stable locators)
-- `src/pages/AppHomePage.ts` to reflect your navigation + “logged in” indicator
-- `src/pages/EntraLoginPage.ts` if your Entra flow differs (CA policies, extra prompts)
-- `playwright.config.ts` projects list and timeouts
-
----
+- `tests/site/langauge-menu-spec.ts` is empty (no active assertions in `site` project yet).
+- `PERCY_TOKEN` is required by env validation even though no Percy integration appears in test code.
+- Some source files include stale comments referencing older project names.
+- There is no checked-in `.env.example`; adding one would simplify onboarding.
 
 ## Troubleshooting
 
-### Entra UI changed (selectors broke)
-Update `src/config/selectors.ts` and/or logic in `src/pages/EntraLoginPage.ts`.
+### Env validation fails at startup
 
-### Tests redirect to login even with storageState
-Possible reasons:
-- cookies/local storage are bound to a different domain than `baseURL`
-- auth is not valid for long (token expiration)
-- conditional access / session policies changed
+Check required variables in `.env` or pipeline variables. Validation errors are printed from `src/config/env.ts`.
 
-Fixes:
-- ensure `baseURL` matches the domain used during authentication
-- keep setup projects in the same run (as here)
-- re-run with a clean auth state: `npm run clean:auth`
+### Tests unexpectedly redirected to login
 
----
+- Delete state: `npm run clean:auth`
+- Re-run setup projects
+- Confirm `baseURL` domain matches where auth cookies are valid
+- Verify role token values for editor/admin
 
-## License
-Use freely inside your org. Replace with your preferred license if needed.
+### Redirect tests flaky on file targets
+
+`redirect.spec.ts` treats PDF targets specially and accepts either a download event or direct response. Confirm target CSV entries resolve against current `BASE_URL_SITE`.
