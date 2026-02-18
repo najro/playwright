@@ -1,4 +1,4 @@
-﻿# playwright-regjeringen
+# regjeringen-playwright-tests
 
 End-to-end test automation for `regjeringen.no`/Optimizely CMS using Playwright + TypeScript.
 

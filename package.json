@@ -1,5 +1,5 @@
 {
-  "name": "playwright-regjeringen",
+  "name": "regjeringen-playwright-tests",
   "version": "1.0.0",
   "private": true,
   "description": "Playwright (TypeScript) E2E testing for Regjeringen/Svar with Entra ID login (incl. MFA via TOTP), multi-project structure, env-based config, POM, and Azure DevOps pipeline.",
